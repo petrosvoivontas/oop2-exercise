@@ -6,4 +6,6 @@ import net.fortuna.ical4j.model.component.VEvent;
 public interface MeetingsParser {
 
 	Meeting transformToMeeting(VEvent vEvent);
+
+	VEvent transformToVEvent(Meeting meeting);
 }
