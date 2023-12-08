@@ -2,11 +2,16 @@ package gr.hua.dit.oop2_ex.usecase;
 
 import gr.hua.dit.oop2_ex.model.Meeting;
 import gr.hua.dit.oop2_ex.parser.MeetingsParser;
+import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
 import net.fortuna.ical4j.model.component.CalendarComponent;
 import net.fortuna.ical4j.model.component.VEvent;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
@@ -81,7 +86,19 @@ public class MeetingsUseCaseImpl implements MeetingsUseCase {
 	}
 
 	@Override
-	public void saveMeeting(Meeting meeting) {
+	public void saveMeeting(Meeting meeting, File calendarFile) {
+		VEvent newEvent = meetingsParser.transformToVEvent(meeting);
 
+		calendar.getComponents().add(newEvent);
+		CalendarOutputter outputter = new CalendarOutputter();
+		try {
+			FileOutputStream fileOutputStream = new FileOutputStream(calendarFile);
+			outputter.output(calendar, fileOutputStream);
+			fileOutputStream.close();
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }
