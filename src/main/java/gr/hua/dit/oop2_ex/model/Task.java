@@ -30,7 +30,7 @@ public class Task extends Event {
 	public LocalDateTime getDueDate() {
 		LocalTime time = getTime();
 		if (time == null) {
-			throw new IllegalStateException("time for a Meeting cannot be null");
+			throw new IllegalStateException("time for a Task cannot be null");
 		}
 		return LocalDateTime.of(getDate(), getTime());
 	}

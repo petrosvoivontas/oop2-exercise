@@ -6,4 +6,6 @@ import net.fortuna.ical4j.model.component.VToDo;
 public interface TasksParser {
 
 	Task transformToTask(VToDo todoComponent);
+
+	VToDo transformToVTodo(Task task);
 }
