@@ -1,5 +1,7 @@
 package gr.hua.dit.oop2_ex.commands;
 
+import gr.hua.dit.oop2_ex.usecase.EventsFilter;
+
 public sealed class Command permits Command.ListEvents, Command.CreateEvents, Command.InvalidCommand {
 
 	private Command() {
@@ -8,19 +10,19 @@ public sealed class Command permits Command.ListEvents, Command.CreateEvents, Co
 	public final static class ListEvents extends Command {
 
 		private final String filePath;
-		private final String subcommand;
+		private final EventsFilter filter;
 
-		public ListEvents(String filePath, String subcommand) {
+		public ListEvents(String filePath, EventsFilter filter) {
 			this.filePath = filePath;
-			this.subcommand = subcommand;
+			this.filter = filter;
 		}
 
 		public String getFilePath() {
 			return filePath;
 		}
 
-		public String getSubcommand() {
-			return subcommand;
+		public EventsFilter getFilter() {
+			return filter;
 		}
 	}
 

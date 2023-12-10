@@ -60,14 +60,14 @@ public class CommandPicker {
 			.filter(filter -> filter.getCommand().equals(filterArg))
 			.findFirst();
 		if (meetingsFilter.isPresent()) {
-			return new Command.ListEvents(filePathArg, meetingsFilter.get().getCommand());
+			return new Command.ListEvents(filePathArg, meetingsFilter.get());
 		}
 
 		Optional<TasksFilter> tasksFilter = Arrays.stream(TasksFilter.values())
 			.filter(filter -> filter.getCommand().equals(filterArg))
 			.findFirst();
 		if (tasksFilter.isPresent()) {
-			return new Command.ListEvents(filePathArg, tasksFilter.get().getCommand());
+			return new Command.ListEvents(filePathArg, tasksFilter.get());
 		}
 
 		return Commands.INVALID_COMMAND;
