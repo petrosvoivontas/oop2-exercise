@@ -1,7 +1,8 @@
-package gr.hua.dit.oop2_ex.usecase;
+package gr.hua.dit.oop2_ex.repo;
 
 import gr.hua.dit.oop2_ex.model.Meeting;
 import gr.hua.dit.oop2_ex.parser.MeetingsParser;
+import gr.hua.dit.oop2_ex.usecase.MeetingsFilter;
 import net.fortuna.ical4j.data.CalendarOutputter;
 import net.fortuna.ical4j.model.Calendar;
 import net.fortuna.ical4j.model.Component;
@@ -18,19 +19,17 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class MeetingsUseCaseImpl implements MeetingsUseCase {
+public class MeetingsRepositoryImpl implements MeetingsRepository {
 
-	private final LocalDateTime now;
 	private final Calendar calendar;
 	private final MeetingsParser meetingsParser;
 
-	public MeetingsUseCaseImpl(LocalDateTime now, Calendar calendar, MeetingsParser meetingsParser) {
-		this.now = now;
+	public MeetingsRepositoryImpl(Calendar calendar, MeetingsParser meetingsParser) {
 		this.calendar = calendar;
 		this.meetingsParser = meetingsParser;
 	}
 
-	private Predicate<Meeting> getFilterPredicate(MeetingsFilter filter) {
+	private Predicate<Meeting> getFilterPredicate(LocalDateTime now, MeetingsFilter filter) {
 		LocalDateTime rangeStart = switch (filter) {
 			case DAY, WEEK, MONTH -> now;
 			case PAST_DAY -> now
@@ -77,7 +76,7 @@ public class MeetingsUseCaseImpl implements MeetingsUseCase {
 			return null;
 		}
 		List<CalendarComponent> eventComponents = calendar.getComponents(Component.VEVENT);
-		Predicate<Meeting> filterPredicate = getFilterPredicate(filter);
+		Predicate<Meeting> filterPredicate = getFilterPredicate(now, filter);
 		return eventComponents.stream()
 			.map(component -> (VEvent) component)
 			.map(meetingsParser::transformToMeeting)
