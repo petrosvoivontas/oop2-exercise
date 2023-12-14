@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Date;
+import java.util.Objects;
 
 public class TasksParserImpl implements TasksParser {
 
@@ -34,7 +35,13 @@ public class TasksParserImpl implements TasksParser {
 			.atZone(dueDate.getTimeZone().toZoneId())
 			.toLocalDateTime();
 
-		final boolean completed = todoComponent.getDateCompleted() != null;
+		boolean completed;
+		Status status = todoComponent.getStatus();
+		if (status == null) {
+			completed = false;
+		} else {
+			completed = Objects.equals(status.getValue(), Status.VALUE_COMPLETED);
+		}
 
 		return new Task(
 			title,
