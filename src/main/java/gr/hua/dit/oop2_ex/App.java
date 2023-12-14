@@ -21,7 +21,6 @@ public class App {
 		TimeTeller timeTeller = TimeService.getTeller();
 		CommandPicker commandPicker = new CommandPicker();
 		Command command = commandPicker.parseCommand(args);
-		System.out.println(command);
 
 		if (command instanceof Command.ListEvents listEventsCommand) {
 			/*

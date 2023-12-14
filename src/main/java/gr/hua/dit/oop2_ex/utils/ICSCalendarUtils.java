@@ -34,10 +34,16 @@ public class ICSCalendarUtils {
 			CalendarBuilder calendarBuilder = new CalendarBuilder();
 			return calendarBuilder.build(inputStream);
 		} catch (FileNotFoundException e) {
+			System.out.println("File in path " + iCalPath + " not found");
+			System.exit(1);
 			throw new RuntimeException(e);
 		} catch (ParserException e) {
+			System.out.println("File in path " + iCalPath + " does not contain a valid iCal calendar");
+			System.exit(1);
 			throw new RuntimeException(e);
 		} catch (IOException e) {
+			System.out.println("There was a problem with opening the file in path " + iCalPath);
+			System.exit(1);
 			throw new RuntimeException(e);
 		}
 	}
