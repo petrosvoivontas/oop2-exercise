@@ -38,7 +38,7 @@ public class CreateEventsUseCase {
 		MeetingsParser meetingsParser,
 		TasksParser tasksParser
 	) {
-		Calendar calendar = ICSCalendarUtils.initCalendar(iCalPath);
+		Calendar calendar = ICSCalendarUtils.getOrCreateCalendar(iCalPath);
 
 		this.iCalPath = iCalPath;
 		this.meetingsRepository = new MeetingsRepositoryImpl(calendar, meetingsParser);

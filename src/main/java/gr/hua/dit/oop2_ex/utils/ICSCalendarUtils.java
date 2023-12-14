@@ -3,9 +3,11 @@ package gr.hua.dit.oop2_ex.utils;
 import net.fortuna.ical4j.data.CalendarBuilder;
 import net.fortuna.ical4j.data.ParserException;
 import net.fortuna.ical4j.model.Calendar;
+import net.fortuna.ical4j.model.ParameterList;
 import net.fortuna.ical4j.model.property.CalScale;
 import net.fortuna.ical4j.model.property.ProdId;
 import net.fortuna.ical4j.model.property.Version;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,14 +17,16 @@ import java.nio.file.Paths;
 
 public class ICSCalendarUtils {
 
+	@NotNull
 	public static Calendar createCalendar() {
 		Calendar calendar = new Calendar();
 		calendar.getProperties().add(new ProdId("-//DIT HUA Event maker"));
-		calendar.getProperties().add(new Version(Version.VALUE_2_0, Version.VALUE_2_0));
+		calendar.getProperties().add(new Version(new ParameterList(), Version.VALUE_2_0));
 		calendar.getProperties().add(new CalScale(CalScale.VALUE_GREGORIAN));
 		return calendar;
 	}
 
+	@NotNull
 	public static Calendar initCalendar(String iCalPath) {
 		File iCalFile = Paths.get(iCalPath).toFile();
 		try {
@@ -36,5 +40,14 @@ public class ICSCalendarUtils {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	@NotNull
+	public static Calendar getOrCreateCalendar(String iCalPath) {
+		File iCalFile = Paths.get(iCalPath).toFile();
+		if (iCalFile.exists()) {
+			return initCalendar(iCalPath);
+		}
+		return createCalendar();
 	}
 }
