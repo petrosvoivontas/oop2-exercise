@@ -111,15 +111,22 @@ public class CreateEventsUseCase {
 		int eventType = scanner.nextInt();
 		scanner.nextLine();
 
+		String eventTypeName;
+		if (eventType == EVENT_TYPE_MEETING) {
+			eventTypeName = EVENT_TYPE_MEETING_NAME;
+		} else {
+			eventTypeName = EVENT_TYPE_TASK_NAME;
+		}
+
 		String title = readTitle(
 			scanner,
-			"Enter a title for the new meeting: ",
-			"Enter a non-empty title for this new event: "
+			"Enter a title for the new " + eventTypeName + ": ",
+			"Enter a non-empty title for this new " + eventTypeName + ": "
 		);
 
 		String description = readDescription(
 			scanner,
-			"Enter a description for the new meeting: "
+			"Enter a description for the new " + eventTypeName + ": "
 		);
 
 		if (eventType == EVENT_TYPE_MEETING) {
@@ -173,5 +180,7 @@ public class CreateEventsUseCase {
 
 	private static final int EVENT_TYPE_MEETING = 1;
 	private static final int EVENT_TYPE_TASK = 2;
+	private static final String EVENT_TYPE_MEETING_NAME = "meeting";
+	private static final String EVENT_TYPE_TASK_NAME = "task";
 	private static final String DATE_TIME_FORMAT_PATTERN = "dd/MM/yyyy H:mm";
 }
