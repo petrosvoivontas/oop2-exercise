@@ -14,14 +14,9 @@ import gr.hua.dit.oop2_ex.repo.MeetingsRepository;
 import gr.hua.dit.oop2_ex.repo.MeetingsRepositoryImpl;
 import gr.hua.dit.oop2_ex.repo.TasksRepository;
 import gr.hua.dit.oop2_ex.repo.TasksRepositoryImpl;
-import net.fortuna.ical4j.data.CalendarBuilder;
-import net.fortuna.ical4j.data.ParserException;
+import gr.hua.dit.oop2_ex.utils.ICSCalendarUtils;
 import net.fortuna.ical4j.model.Calendar;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -52,28 +47,13 @@ public class ListEventsUseCase {
 		TasksParser tasksParser,
 		TasksLogger tasksLogger
 	) {
-		Calendar calendar = initCalendar(iCalPath);
+		Calendar calendar = ICSCalendarUtils.initCalendar(iCalPath);
 
 		this.iCalPath = iCalPath;
 		this.meetingsRepository = new MeetingsRepositoryImpl(calendar, meetingsParser);
 		this.meetingsLogger = meetingsLogger;
 		this.tasksRepository = new TasksRepositoryImpl(calendar, tasksParser);
 		this.tasksLogger = tasksLogger;
-	}
-
-	private Calendar initCalendar(String iCalPath) {
-		File iCalFile = Paths.get(iCalPath).toFile();
-		try {
-			FileInputStream inputStream = new FileInputStream(iCalFile);
-			CalendarBuilder calendarBuilder = new CalendarBuilder();
-			return calendarBuilder.build(inputStream);
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
-		} catch (ParserException e) {
-			throw new RuntimeException(e);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	public void printEventsWithFilter(LocalDateTime now, EventsFilter filter) {
