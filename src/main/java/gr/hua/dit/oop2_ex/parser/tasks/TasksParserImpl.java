@@ -8,6 +8,7 @@ import net.fortuna.ical4j.model.PropertyList;
 import net.fortuna.ical4j.model.component.VToDo;
 import net.fortuna.ical4j.model.property.Description;
 import net.fortuna.ical4j.model.property.Due;
+import net.fortuna.ical4j.model.property.Status;
 import net.fortuna.ical4j.model.property.Summary;
 
 import java.time.LocalDate;
@@ -56,6 +57,9 @@ public class TasksParserImpl implements TasksParser {
 			Description descriptionProperty = new Description(description);
 			properties.add(descriptionProperty);
 		}
+
+		Status status = new Status(Status.VALUE_IN_PROCESS);
+		properties.add(status);
 
 		Date dueDate = LocalDateTimeUtils.toCalendar(task.getDueDate()).getTime();
 		Due due = new Due(new DateTime(dueDate));
