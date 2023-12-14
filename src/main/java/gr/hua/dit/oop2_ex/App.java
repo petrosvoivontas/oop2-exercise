@@ -19,6 +19,7 @@ public class App {
 		 */
 
 		TimeTeller timeTeller = TimeService.getTeller();
+		TimeService.stop();
 		CommandPicker commandPicker = new CommandPicker();
 		Command command = commandPicker.parseCommand(args);
 
