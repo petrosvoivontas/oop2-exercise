@@ -5,15 +5,19 @@ import gr.hua.dit.oop2_ex.utils.LocalDateTimeUtils;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.PropertyList;
+import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.component.VToDo;
 import net.fortuna.ical4j.model.property.Description;
 import net.fortuna.ical4j.model.property.Due;
+import net.fortuna.ical4j.model.property.Status;
 import net.fortuna.ical4j.model.property.Summary;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Date;
+import java.util.Objects;
 
 public class TasksParserImpl implements TasksParser {
 
@@ -28,12 +32,19 @@ public class TasksParserImpl implements TasksParser {
 		}
 
 		final Due dueDate = todoComponent.getDue();
+		final TimeZone dueDateTimeZone = dueDate.getTimeZone();
 		final LocalDateTime dueDateTime = dueDate.getDate()
 			.toInstant()
-			.atZone(dueDate.getTimeZone().toZoneId())
+			.atZone(dueDateTimeZone != null ? dueDateTimeZone.toZoneId() : ZoneId.systemDefault())
 			.toLocalDateTime();
 
-		final boolean completed = todoComponent.getDateCompleted() != null;
+		boolean completed;
+		Status status = todoComponent.getStatus();
+		if (status == null) {
+			completed = false;
+		} else {
+			completed = Objects.equals(status.getValue(), Status.VALUE_COMPLETED);
+		}
 
 		return new Task(
 			title,
@@ -56,6 +67,9 @@ public class TasksParserImpl implements TasksParser {
 			Description descriptionProperty = new Description(description);
 			properties.add(descriptionProperty);
 		}
+
+		Status status = new Status(Status.VALUE_IN_PROCESS);
+		properties.add(status);
 
 		Date dueDate = LocalDateTimeUtils.toCalendar(task.getDueDate()).getTime();
 		Due due = new Due(new DateTime(dueDate));

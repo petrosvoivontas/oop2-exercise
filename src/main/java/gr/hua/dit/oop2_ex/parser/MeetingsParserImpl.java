@@ -10,10 +10,7 @@ import net.fortuna.ical4j.model.property.DtEnd;
 import net.fortuna.ical4j.model.property.DtStart;
 import net.fortuna.ical4j.model.property.Summary;
 
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.Date;
 
 public class MeetingsParserImpl implements MeetingsParser {
@@ -29,15 +26,17 @@ public class MeetingsParserImpl implements MeetingsParser {
 		}
 
 		final DtStart startDate = vEvent.getStartDate();
+		final TimeZone startDateTimeZone = startDate.getTimeZone();
 		final LocalDateTime startDateTime = startDate.getDate()
 			.toInstant()
-			.atZone(startDate.getTimeZone().toZoneId())
+			.atZone(startDateTimeZone != null ? startDateTimeZone.toZoneId() : ZoneId.systemDefault())
 			.toLocalDateTime();
 
 		final DtEnd endDate = vEvent.getEndDate();
+		final TimeZone endDateTimeZone = endDate.getTimeZone();
 		final LocalDateTime endDateTime = endDate.getDate()
 			.toInstant()
-			.atZone(endDate.getTimeZone().toZoneId())
+			.atZone(endDateTimeZone != null ? endDateTimeZone.toZoneId() : ZoneId.systemDefault())
 			.toLocalDateTime();
 		long duration = Duration.between(startDateTime, endDateTime).toMillis();
 
