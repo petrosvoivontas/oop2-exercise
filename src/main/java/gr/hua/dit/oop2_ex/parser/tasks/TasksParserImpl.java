@@ -5,6 +5,7 @@ import gr.hua.dit.oop2_ex.utils.LocalDateTimeUtils;
 import net.fortuna.ical4j.model.DateTime;
 import net.fortuna.ical4j.model.Property;
 import net.fortuna.ical4j.model.PropertyList;
+import net.fortuna.ical4j.model.TimeZone;
 import net.fortuna.ical4j.model.component.VToDo;
 import net.fortuna.ical4j.model.property.Description;
 import net.fortuna.ical4j.model.property.Due;
@@ -14,6 +15,7 @@ import net.fortuna.ical4j.model.property.Summary;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.Objects;
 
@@ -30,9 +32,10 @@ public class TasksParserImpl implements TasksParser {
 		}
 
 		final Due dueDate = todoComponent.getDue();
+		final TimeZone dueDateTimeZone = dueDate.getTimeZone();
 		final LocalDateTime dueDateTime = dueDate.getDate()
 			.toInstant()
-			.atZone(dueDate.getTimeZone().toZoneId())
+			.atZone(dueDateTimeZone != null ? dueDateTimeZone.toZoneId() : ZoneId.systemDefault())
 			.toLocalDateTime();
 
 		boolean completed;
