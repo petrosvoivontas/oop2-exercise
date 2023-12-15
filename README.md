@@ -67,9 +67,9 @@ java -jar calendar.jar mycal.ics
 Management of `.ics` files (parsing and creating) is done using the [iCal4j](https://www.ical4j.org) library
 
 # Other dependencies
-The `org.jetbrains.annotations` library was also used, to better define nullable and not-null parameters.
+The [org.jetbrains.annotations](https://www.jetbrains.com/help/idea/annotating-source-code.html) library was also used, to better define nullable and not-null parameters.
 
-# Walkthrough
+# Code walkthrough
 
 ## App.java
 This file contains the `main` method of the application.
