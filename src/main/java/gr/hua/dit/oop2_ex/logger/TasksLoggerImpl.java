@@ -32,8 +32,6 @@ public class TasksLoggerImpl implements TasksLogger {
 		stringBuilder.append("COMPLETED: ");
 		if (task.isCompleted()) {
 			stringBuilder.append("YES");
-//			stringBuilder.append('\n');
-//			stringBuilder.append("COMPLETED AT: ");
 		} else {
 			stringBuilder.append("NO");
 		}
@@ -42,6 +40,6 @@ public class TasksLoggerImpl implements TasksLogger {
 
 	@Override
 	public void logTask(Task task) {
-		printStream.println(task);
+		printStream.println(taskToString(task));
 	}
 }
