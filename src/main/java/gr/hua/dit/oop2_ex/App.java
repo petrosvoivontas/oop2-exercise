@@ -4,12 +4,24 @@ import gr.hua.dit.oop2.calendar.TimeService;
 import gr.hua.dit.oop2.calendar.TimeTeller;
 import gr.hua.dit.oop2_ex.commands.Command;
 import gr.hua.dit.oop2_ex.commands.CommandPicker;
+import gr.hua.dit.oop2_ex.layout.CalendarFrame;
 import gr.hua.dit.oop2_ex.usecase.CreateEventsUseCase;
 import gr.hua.dit.oop2_ex.usecase.ListEventsUseCase;
+
+import javax.swing.*;
 
 public class App {
 
 	public static void main(String[] args) {
+		SwingUtilities.invokeLater(() -> {
+			CalendarFrame calendarFrame = new CalendarFrame();
+
+			calendarFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			calendarFrame.setSize(300,300);
+			calendarFrame.setLocationRelativeTo(null);
+			calendarFrame.setVisible(true);
+		});
+
 		/*
 		1. validate args
 		2. choose scenario based on number of args
