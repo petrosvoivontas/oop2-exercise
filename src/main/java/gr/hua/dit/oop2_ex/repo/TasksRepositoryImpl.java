@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 public class TasksRepositoryImpl implements TasksRepository {
@@ -48,6 +49,18 @@ public class TasksRepositoryImpl implements TasksRepository {
 		VToDo todo = tasksParser.transformToVTodo(task);
 
 		calendar.getComponents().add(todo);
+		storeCalendarToFile(calendarFile);
+	}
+
+	@Override
+	public void deleteMeeting(Task task, File calendarFile) {
+		calendar.getComponents(VToDo.VTODO)
+			.stream().filter(vTodo -> Objects.equals(((VToDo) vTodo).getSummary().getValue(), task.getTitle()))
+			.findFirst().ifPresent(vEventToDelete -> calendar.getComponents().remove(vEventToDelete));
+		storeCalendarToFile(calendarFile);
+	}
+
+	private void storeCalendarToFile(File calendarFile) {
 		CalendarOutputter outputter = new CalendarOutputter();
 		try {
 			FileOutputStream fileOutputStream = new FileOutputStream(calendarFile);
@@ -59,5 +72,4 @@ public class TasksRepositoryImpl implements TasksRepository {
 			throw new RuntimeException(e);
 		}
 	}
-
 }

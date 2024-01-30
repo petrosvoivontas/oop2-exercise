@@ -40,9 +40,9 @@ public class MeetingDetailsDialog extends JDialog {
 		this.meeting = meeting;
 
 		if (meeting != null) {
-			setTitle("Edit \"" + meeting.getTitle() + "\"");
+			setTitle("Editing \"" + meeting.getTitle() + "\"");
 		} else {
-			setTitle("New Meeting");
+			setTitle("New meeting");
 		}
 
 		setContentPane(contentPane);

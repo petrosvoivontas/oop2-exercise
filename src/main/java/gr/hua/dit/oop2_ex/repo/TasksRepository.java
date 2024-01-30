@@ -12,4 +12,6 @@ public interface TasksRepository {
 	List<Task> getTasks(LocalDateTime now, TasksFilter filter);
 
 	void saveTask(Task task, File calendarFile);
+
+	void deleteMeeting(Task task, File calendarFile);
 }
