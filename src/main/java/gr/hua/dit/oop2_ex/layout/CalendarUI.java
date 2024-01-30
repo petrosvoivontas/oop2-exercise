@@ -2,7 +2,7 @@ package gr.hua.dit.oop2_ex.layout;
 
 import javax.swing.*;
 
-public class AppLayout {
+public class CalendarUI {
 
 	public static void main(String[] args) {
 		SwingUtilities.invokeLater(() -> {
