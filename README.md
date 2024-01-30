@@ -92,3 +92,27 @@ These classes are mainly used in the list operation, taking a `Meeting` or `Task
 ## MeetingsParser / TasksParser
 These classes are responsible for transforming an object of a class we have defined to an object of an iCal4j class, and vice versa. Instead of having that transformation code
 in repositories or use cases, we have extracted it into separate classes.
+
+# UI
+
+All the functionality of the calendar can be accessed from the GUI by running the following command
+
+```shell
+java -jar calendar.jar
+```
+
+## Locate and open a `.ics` file
+
+![img.png](img.png)
+
+## Choose between the different lists
+
+![img_1.png](img_1.png)
+
+![img_2.png](img_2.png)
+
+## View and edit event details
+
+![img_3.png](img_3.png)
+
+![img_4.png](img_4.png)
