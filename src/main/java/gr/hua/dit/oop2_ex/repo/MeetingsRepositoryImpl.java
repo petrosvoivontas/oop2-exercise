@@ -17,6 +17,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 public class MeetingsRepositoryImpl implements MeetingsRepository {
@@ -89,6 +90,18 @@ public class MeetingsRepositoryImpl implements MeetingsRepository {
 		VEvent newEvent = meetingsParser.transformToVEvent(meeting);
 
 		calendar.getComponents().add(newEvent);
+		storeCalendarToFile(calendarFile);
+	}
+
+	@Override
+	public void deleteMeeting(Meeting meeting, File calendarFile) {
+		calendar.getComponents(VEvent.VEVENT)
+			.stream().filter(vEvent -> Objects.equals(((VEvent) vEvent).getSummary().getValue(), meeting.getTitle()))
+			.findFirst().ifPresent(vEventToDelete -> calendar.getComponents().remove(vEventToDelete));
+		storeCalendarToFile(calendarFile);
+	}
+
+	private void storeCalendarToFile(File calendarFile) {
 		CalendarOutputter outputter = new CalendarOutputter();
 		try {
 			FileOutputStream fileOutputStream = new FileOutputStream(calendarFile);
