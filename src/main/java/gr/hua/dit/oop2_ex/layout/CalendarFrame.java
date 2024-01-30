@@ -46,6 +46,7 @@ public class CalendarFrame extends JFrame {
 		if (state == JFileChooser.APPROVE_OPTION) {
 			calendarFile = fileChooser.getSelectedFile();
 			getMenuBar().add(createViewMenu());
+			displayButtonsForNewEvents();
 		}
 	}
 
@@ -239,14 +240,7 @@ public class CalendarFrame extends JFrame {
 		setMenuBar(menuBar);
 	}
 
-	@Override
-	protected void frameInit() {
-		super.frameInit();
-
-		setupMenuBar();
-
-		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
-
+	private void displayButtonsForNewEvents() {
 		JButton newMeetingButton = new JButton("New meeting");
 		JButton newTaskButton = new JButton("New task");
 
@@ -276,5 +270,15 @@ public class CalendarFrame extends JFrame {
 
 		add(newMeetingButton);
 		add(newTaskButton);
+		validate();
+	}
+
+	@Override
+	protected void frameInit() {
+		super.frameInit();
+
+		setupMenuBar();
+
+		setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 	}
 }
