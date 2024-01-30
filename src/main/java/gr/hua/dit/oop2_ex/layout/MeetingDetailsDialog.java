@@ -2,10 +2,18 @@ package gr.hua.dit.oop2_ex.layout;
 
 import com.github.lgooddatepicker.components.DateTimePicker;
 import gr.hua.dit.oop2_ex.model.Meeting;
+import gr.hua.dit.oop2_ex.repo.MeetingsRepository;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 public class MeetingDetailsDialog extends JDialog {
 	private JPanel contentPane;
@@ -16,11 +24,21 @@ public class MeetingDetailsDialog extends JDialog {
 	private DateTimePicker startDateTimePicker;
 	private DateTimePicker endDateTimePicker;
 
+	private final MeetingsRepository meetingsRepository;
+	private final File calendarFile;
+
 	@Nullable
 	private final Meeting meeting;
 
-	public MeetingDetailsDialog(@Nullable Meeting meeting) {
+	public MeetingDetailsDialog(
+		MeetingsRepository meetingsRepository,
+		File calendarFile,
+		@Nullable Meeting meeting
+	) {
+		this.meetingsRepository = meetingsRepository;
+		this.calendarFile = calendarFile;
 		this.meeting = meeting;
+
 		if (meeting != null) {
 			setTitle("Edit \"" + meeting.getTitle() + "\"");
 		} else {
@@ -28,7 +46,7 @@ public class MeetingDetailsDialog extends JDialog {
 		}
 
 		setContentPane(contentPane);
-		setModal(true);
+		setModalityType(ModalityType.APPLICATION_MODAL);
 		getRootPane().setDefaultButton(buttonSave);
 
 		buttonSave.addActionListener(e -> onSave());
@@ -64,6 +82,7 @@ public class MeetingDetailsDialog extends JDialog {
 
 	private void onSave() {
 		// add your code here
+		saveMeeting();
 		dispose();
 	}
 
@@ -72,10 +91,26 @@ public class MeetingDetailsDialog extends JDialog {
 		dispose();
 	}
 
-	public static void main(String[] args) {
-		MeetingDetailsDialog dialog = new MeetingDetailsDialog(null);
-		dialog.pack();
-		dialog.setVisible(true);
-		System.exit(0);
+	private Meeting constructNewMeeting() {
+		String title = titleTextField.getText();
+		String description = descriptionTextArea.getText();
+		LocalDateTime startDatetime = startDateTimePicker.getDateTimeStrict();
+		LocalDateTime endDateTime = endDateTimePicker.getDateTimeStrict();
+		long duration = ChronoUnit.MILLIS.between(startDatetime, endDateTime);
+		return new Meeting(
+			title,
+			description,
+			LocalDate.from(startDatetime),
+			LocalTime.from(endDateTime),
+			duration
+		);
+	}
+
+	private void saveMeeting() {
+		Meeting newMeeting = constructNewMeeting();
+		if (meeting != null) {
+			meetingsRepository.deleteMeeting(meeting, calendarFile);
+		}
+		meetingsRepository.saveMeeting(newMeeting, calendarFile);
 	}
 }

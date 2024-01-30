@@ -13,6 +13,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -31,8 +32,8 @@ public class CalendarFrame extends JFrame {
 		int state = fileChooser.showOpenDialog(null);
 
 		if (state == JFileChooser.APPROVE_OPTION) {
-			String filePath = fileChooser.getSelectedFile().getAbsolutePath();
-			getEvents(filePath);
+			File calendarFile = fileChooser.getSelectedFile();
+			getEvents(calendarFile);
 		}
 	}
 
@@ -46,8 +47,8 @@ public class CalendarFrame extends JFrame {
 			formatter.format(meeting.getEndDateTime());
 	}
 
-	private void getEvents(String filePath) {
-		Calendar calendar = ICSCalendarUtils.getOrCreateCalendar(filePath);
+	private void getEvents(File calendarFile) {
+		Calendar calendar = ICSCalendarUtils.getOrCreateCalendar(calendarFile.getAbsolutePath());
 		MeetingsRepository meetingsRepository = new MeetingsRepositoryImpl(calendar, new MeetingsParserImpl());
 		List<Meeting> meetings = meetingsRepository.getMeetings(LocalDateTime.now(), MeetingsFilter.PAST_WEEK);
 		List<String> meetingsModels = meetings.stream().map(this::getMeetingPreview).toList();
@@ -64,7 +65,11 @@ public class CalendarFrame extends JFrame {
 					System.out.println("double click on " + e.getComponent());
 					int listIndex = jList.locationToIndex(e.getPoint());
 					Meeting meeting = meetings.get(listIndex);
-					MeetingDetailsDialog meetingDetailsFrame = new MeetingDetailsDialog(meeting);
+					MeetingDetailsDialog meetingDetailsFrame = new MeetingDetailsDialog(
+						meetingsRepository,
+						calendarFile,
+						meeting
+					);
 					meetingDetailsFrame.pack();
 					meetingDetailsFrame.setVisible(true);
 				}
