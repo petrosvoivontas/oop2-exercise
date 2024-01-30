@@ -12,4 +12,6 @@ public interface MeetingsRepository {
 	List<Meeting> getMeetings(LocalDateTime now, MeetingsFilter filter);
 
 	void saveMeeting(Meeting meeting, File calendarFile);
+
+	void deleteMeeting(Meeting meeting, File calendarFile);
 }
